@@ -83,6 +83,53 @@ mainBtns.forEach(btn => {
 });
 // End of Main Button
 
+// Progress Bar
+const halfCircles = document.querySelectorAll(".half-circle");
+const halfCircleTop = document.querySelector(".half-circle-top");
+const progressBarCircle = document.querySelector(".progress-bar-cirlce");
+
+const progressBarFn = () => {
+    const pageViewportHeight = window.innerHeight;
+    const pageHeight = document.documentElement.scrollHeight;
+    const scrolledPortion = window.pageYOffset;
+
+    const scrolledPortionDegree = (scrolledPortion / (pageHeight - pageViewportHeight)) * 360;
+    
+    halfCircles.forEach((el) => {
+        el.style.transform = `rotate(${scrolledPortionDegree}deg)`;
+
+        if (scrolledPortionDegree >= 180) {
+            halfCircles[0].style.transform = "rotate(180deg)";
+            halfCircleTop.style.opacity = "0";
+        } else {
+            halfCircleTop.style.opacity = "1";
+        }
+    });
+};
+// End of Progress Bar
+
+// Navigation
+const menuIcon = document.querySelector(".menu-icon");
+const navbar = document.querySelector(".navbar");
+
+document.addEventListener("scroll", () => {
+    menuIcon.classList.add("show-menu-icon");
+    navbar.classList.add("hide-navbar");
+    
+    if (window.scrollY === 0) {
+        menuIcon.classList.remove("show-menu-icon");
+        navbar.classList.remove("hide-navbar");
+    };
+
+    progressBarFn();
+});
+
+menuIcon.addEventListener("click", () => {
+    menuIcon.classList.remove("show-menu-icon");
+    navbar.classList.remove("hide-navbar");
+});
+// End of Navigation
+
 // About me Text
 const aboutMeText = document.querySelector(".about-me-text");
 const aboutMeTextContent = "I am a full stack web developer who has many interests, hobbies, and humors!";
@@ -187,3 +234,70 @@ projectBtn.addEventListener("click", (e) => {
 });
 // End of Projects button
 // End of Projects
+
+// Section 4
+document.querySelectorAll(".service-btn").forEach((service) => {
+    service.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const serviceText = service.nextElementSibling;
+        serviceText.classList.toggle("change");
+
+        const rightPosition = serviceText.classList.contains("change") 
+            ? `calc(100% - ${getComputedStyle(service.firstElementChild).width})` 
+            : 0;
+
+        service.firstElementChild.style.right = rightPosition;
+    });
+});
+// End of Section 4
+
+// Section 5
+// Form
+const formHeading = document.querySelector(".form-heading");
+const formInputs = document.querySelectorAll(".contact-form-input");
+
+formInputs.forEach((input) => {
+    input.addEventListener("focus", () => {
+        formHeading.style.opacity = "0";
+        setTimeout(() => {
+            formHeading.textContent = `Your ${input.placeholder}`;
+            formHeading.style.opacity = "1";
+        }, 300);
+    });
+    input.addEventListener("blur", () => {
+        formHeading.style.opacity = "0";
+        setTimeout(() => {
+            formHeading.textContent = "Let's Talk";
+            formHeading.style.opacity = "1";
+        }, 300);
+    });
+});
+// End of Form
+
+// Slideshow
+const slideshow = document.querySelector(".slideshow");
+
+setInterval(() => {
+    const firstIcon = slideshow.firstElementChild;
+
+    firstIcon.classList.add("faded-out");
+
+    const thirdIcon = slideshow.children[3];
+
+    thirdIcon.classList.add("light");
+
+    thirdIcon.previousElementSibling.classList.remove("light");
+
+    setTimeout(() => {
+        slideshow.removeChild(firstIcon);
+
+        slideshow.appendChild(firstIcon);
+
+        setTimeout(() => {
+            firstIcon.classList.remove("faded-out");            
+        }, 500);
+    }, 500);    
+}, 3000);
+// End of Slideshow
+// End of Section 5
